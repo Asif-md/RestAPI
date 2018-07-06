@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.3.3/fabric.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.3.3/fabric.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+
+</head>
+<body>
+    <div class="container" style="background-color:none;" ng-controller="AppCtrl">
+        <h1>welcome to the editor</h1>
+           <table class="table table-responsive">
+               <thead>
+                   <tr>
+                        <th>name</th>
+                        <th>age</th>
+                        <th>location</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>action</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr ng-repeat="contact in contactlist">
+                        <td>{{contact.name}}</td>
+                        <td>{{contact.price}}</td>
+                        <td>{{contact.category}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>edit</td>
+                   </tr>
+                   
+               </tbody>
+           </table>
+
+           <p>Hello</p>
+          
+
+
+           <img src="./assets/img/1.png" id="my-image" >
+<br>        
+         
+
+           <input type="button" onclick="f_left()" value="<-- "/>
+      
+           <input type="button" onclick="f_right()" value="--> "/>
+      
+
+           <input type="button" onclick="f_up()" value="up "/>
+      
+           <input type="button" onclick="f_down()" value="down "/>
+
+           <input type="button" onclick="f_save()" value="Save Current Positions"/>
+           
+           <input type="button" onclick="f_undo()" value="restore last Positions"/>
+           <input type="button" onclick="f_sX_inc()" value=" scaleX +"/>
+           <input type="button" onclick="f_sX_dec()" value="scaleX -"/>
+
+
+           <input type="button" onclick="f_sY_inc()" value=" scaleY +"/>
+           <input type="button" onclick="f_sY_dec()" value="scaleY -"/>
+
+        <input type="text"  value="text" id='itext'>
+
+        
+        <input type="button" onclick="f_text()" value="Set text">
+        <canvas class="container" id="c" width="1000" height="600" style="border: 1px solid rgb(3, 24, 3);">
+
+
+
+        </canvas>
+    </div>
+    <script type="text/javascript">
+        var canvas = new fabric.Canvas('c');
+
+        var objText = new fabric.IText("I'm in Comic Sans", {
+            fontFamily: 'Comic Sans'
+
+              });
+              var rect = new fabric.Rect({
+            left : 100,
+            top : 150,
+            fill : 'blue',
+            width : 200,
+            height : 200,
+            angle : 45
+
+        });
+           var imgElement = document.getElementById('my-image');
+           var imgInstance = new fabric.Image(imgElement, {
+             left: 100,
+             top: 100,
+             angle: 30,
+             opacity: 0.85
+           });
+
+
+
+
+
+         canvas.add(imgInstance,objText,rect);
+
+
+//set input text to object
+
+   function f_text()
+        {
+           var t=document.getElementById("itext").value;
+           //alert(t);
+
+//var t2=canvas.item(1);
+//var r3=canvas.item(0);
+            canvas.item(1).set({text:t});
+        //    var t3=t2;
+
+//var s="bp";
+            //canvas.item(1).set({});
+            f_r();
+        }
+
+
+
+//varibales to store current position,size,and angle
+var s_x=0;
+var s_y=0;
+var s_angle=0;
+
+
+var x=100;
+var y=150;
+var speed=50;
+
+
+//size
+var w=200;
+var h=200;
+var scl_X=0.0;
+var scl_Y=0.0;
+
+     
+  
+        function f_right()
+        {
+x=x+speed;
+          canvas.item(0).set({left:x});
+          f_r();
+        }
+        function f_left()
+        {
+            x=x-speed;
+          canvas.item(0).set({left:x});
+          f_r();
+        }
+
+       function f_up()
+        {
+            y=y-speed;
+          canvas.item(0).set({top:y});
+          f_r();
+        }
+        function f_down()
+        {
+            y=y+speed;
+          canvas.item(0).set({top:y});
+          f_r();
+        }
+
+//increase scaleX
+      function f_sX_inc()
+        {
+            scl_X++;
+            f_set_sacleX();
+        }
+//decrease scaleX
+        function f_sX_dec()
+        { 
+            alert("scale --");
+            scl_X--;
+            f_set_sacleX();
+        }
+
+
+//increase scaleY
+function f_sY_inc()
+        {
+            scl_Y++;
+            f_set_sacleY();
+        }
+//decrease scaleY
+        function f_sY_dec()
+        { 
+            scl_Y--;
+            f_set_sacleY();
+        }
+
+
+
+
+        function f_set_sacleX()
+        {
+            canvas.item(0).set({scaleX:scl_X});
+            f_r();
+        }
+        function f_set_sacleY()
+        {
+            canvas.item(0).set({scaleX:scl_Y});
+            f_r();
+        }
+        function f_r()
+        {
+        canvas.renderAll();
+         canvas.calcOffset();
+        }
+
+       function f_save()
+        {
+         
+
+var c_x=  canvas.item(0).left;
+var c_y=canvas.item(0).top;
+s_angle=canvas.item(0).angle;
+            s_x=c_x;
+            s_y=c_y;
+
+w= canvas.item(0).width;
+h= canvas.item(0).height;
+scl_X=canvas.item(0).scaleX;
+scl_Y=canvas.item(0).scaleY;
+
+var rt=canvas.item(0);
+
+var rt2=rt;
+alert("Current Size :\n width , Hegigh :"+w+","+h+"\n"+scl_X+","+scl_Y);
+
+          f_r();
+        }
+
+       function f_undo()
+        {
+          
+            x=s_x;
+            y=s_y;
+            canvas.item(0).set({left:x});
+           canvas.item(0).set({top:y});
+
+
+           canvas.item(0).set({angle:s_angle});
+            canvas.item(0).set({width:w});
+            canvas.item(0).set({height:h});
+            canvas.item(0).set({scaleX:scl_X});
+            canvas.item(0).set({scaleY:scl_Y});
+
+
+          f_r();
+        }
+
+      
+   
+    </script>
+
+    <script src="./assets/angular.min.js"></script>
+    <script src="./controllers/controller.js"></script>
+    
+   
+</body>
+</html>
